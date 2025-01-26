@@ -4,9 +4,3 @@ export default {
     autoprefixer: {},
   },
 }
-module.exports = {
-  // ... إعدادات أخرى
-  experimental: {
-    serverComponentsExternalPackages: ["netlify"],
-  },
-};
