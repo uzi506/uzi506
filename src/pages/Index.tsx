@@ -4,6 +4,7 @@ import Skills from "@/components/Skills";
 import Reviews from "@/components/Reviews";
 import FeedbackForm from "@/components/ui/FeedbackForm";
 
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-dark" dir="rtl">
