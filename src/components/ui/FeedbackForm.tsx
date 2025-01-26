@@ -24,21 +24,22 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // إرسال البيانات لـ Netlify Forms
+    // Gather form data
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
 
     try {
+      // Submit to Netlify Forms
       await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(formData as any).toString(),
       });
 
-      // العرض المحلي للتقييم
+      // Add review locally for UI update
       addReview({
         name: formData.get("name") as string,
         rating: Number(formData.get("rating")),
@@ -51,9 +52,11 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
         description: "تم إرسال تقييمك بنجاح",
       });
 
+      // Reset form
       setFormData({ name: "", app: "يقين", comment: "" });
       setRating(5);
     } catch (error) {
+      console.error("Error submitting form:", error);
       toast({
         title: "حدث خطأ!",
         description: "لم يتم إرسال التقييم، حاول مرة أخرى",
@@ -80,14 +83,14 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
           data-netlify="true"
           netlify-honeypot="bot-field"
         >
-          {/* حقول Netlify المخفية */}
+          {/* Hidden Netlify fields */}
           <input type="hidden" name="form-name" value="feedback-form" />
-          <input type="hidden" name="rating" value={rating} />
+          <input type="hidden" name="rating" value={rating.toString()} />
           <div hidden>
             <input name="bot-field" />
           </div>
 
-          {/* حقل الاسم */}
+          {/* Name Field */}
           <div>
             <label className="block text-lg mb-2">الاسم</label>
             <input
@@ -102,7 +105,7 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
             />
           </div>
 
-          {/* حقل التطبيق */}
+          {/* App Field */}
           <div>
             <label className="block text-lg mb-2">التطبيق</label>
             <select
@@ -118,7 +121,7 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
             </select>
           </div>
 
-          {/* حقل التقييم */}
+          {/* Rating Field */}
           <div>
             <label className="block text-lg mb-2">التقييم</label>
             <div className="flex gap-2">
@@ -142,7 +145,7 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
             </div>
           </div>
 
-          {/* حقل التعليق */}
+          {/* Comment Field */}
           <div>
             <label className="block text-lg mb-2">التعليق</label>
             <textarea
@@ -156,7 +159,7 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
             />
           </div>
 
-          {/* زر الإرسال */}
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-darkPurple hover:bg-[#2A0737] text-white py-3 rounded-lg transition-colors"
