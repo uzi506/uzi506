@@ -10,7 +10,18 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root"></div> <!-- React will render content here -->
+
+    <!-- نموذج Netlify الأساسي -->
+    <form method="POST" data-netlify="true" name="test-form">
+      <input type="hidden" name="form-name" value="test-form" />
+      <label>
+        الاسم:
+        <input type="text" name="name" />
+      </label>
+      <button type="submit">إرسال</button>
+    </form>
+
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
