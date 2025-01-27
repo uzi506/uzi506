@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
-import Reviews from "@/components/Reviews";
+import Reviews from "@/components/ui/Reviews";
 import FeedbackForm from "@/components/ui/FeedbackForm";
 
 
