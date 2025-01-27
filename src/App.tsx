@@ -2,8 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import FeedbackForm from "@/components/ui/FeedbackForm";
 import FloatingAvatar from "@/components/ui/FloatingAvatar";
 
 const queryClient = new QueryClient();
@@ -15,11 +14,10 @@ const App = () => {
         <Toaster />
         <Sonner />
         <FloatingAvatar />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-          </Routes>
-        </BrowserRouter>
+        <div>
+          <h1>مرحبًا بك في الصفحة الرئيسية</h1>
+          <FeedbackForm />
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );
