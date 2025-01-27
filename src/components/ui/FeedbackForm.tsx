@@ -33,11 +33,15 @@ const FeedbackForm = ({ addReview }: FeedbackFormProps) => {
 
     try {
       // Submit to Netlify Forms
-      await fetch("/", {
+      const response = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
+        body: new URLSearchParams(Object.fromEntries(formData as any)).toString(),
       });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
 
       // Add review locally for UI update
       addReview({
