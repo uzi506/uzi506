@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,9 +21,8 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
-/* تأثير النص المتغير */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
+/* تأثير النص المتغير */
 .gradient-text {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(90deg, #6a21a9, #9466d6, #c5a4ef, #6a21a9);
@@ -31,7 +32,6 @@
   animation: gradient-animation 6s ease infinite;
 }
 
-/* حركة التدرج اللوني */
 @keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
@@ -43,4 +43,3 @@
     background-position: 0% 50%;
   }
 }
-
