@@ -3,8 +3,97 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background: linear-gradient(to bottom right, #2D0845, #1A0B26);
+  min-height: 100vh;
+  color: white;
 }
 
+/* Review Form Styling */
+.review-form {
+  background: rgba(26, 11, 38, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 12, 107, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.form-input {
+  background: rgba(45, 8, 69, 0.5) !important;
+  border: 1px solid rgba(74, 12, 107, 0.2) !important;
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #facc15 !important;
+  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.1) !important;
+}
+
+/* Review Item Styling */
+.review-item {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(74, 12, 107, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  text-align: right;
+  transition: all 0.3s ease;
+}
+
+.review-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(74, 12, 107, 0.2);
+}
+
+/* Star Rating System */
+.rating-stars {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.star-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+/* Form Button Styling */
+.submit-button {
+  background: #facc15 !important;
+  color: #2D0845 !important;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+  
+  .review-form {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .review-item {
+    padding: 1rem;
+  }
+}
+
+/* Existing Logo Animations (keep if needed) */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -19,12 +108,8 @@
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -32,12 +117,3 @@
     animation: logo-spin infinite 20s linear;
   }
 }
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-

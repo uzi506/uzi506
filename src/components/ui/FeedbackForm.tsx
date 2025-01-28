@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useReviewStore } from "./Reviews";
+import { useReviewStore } from "@/components/Reviews";
 
 const FeedbackForm = () => {
   const [rating, setRating] = useState(5);
@@ -12,25 +12,50 @@ const FeedbackForm = () => {
   const { toast } = useToast();
   const addReview = useReviewStore((state) => state.addReview);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    addReview({
-      name,
-      rating,
-      comment,
-      app: "يقين"
-    });
+    try {
+      // Add review to local state
+      await addReview({
+        name,
+        rating,
+        comment,
+        app: "يقين"
+      });
 
-    // Reset form
-    setName("");
-    setComment("");
-    setRating(5);
-    
-    toast({
-      title: "شكراً لك!",
-      description: "تم إرسال تقييمك بنجاح",
-    });
+      // Send data to Netlify Forms
+      const formData = new URLSearchParams({
+        "form-name": "reviews",
+        name,
+        rating: rating.toString(),
+        comment,
+        app: "يقين"
+      });
+
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formData.toString()
+      });
+
+      // Reset form
+      setName("");
+      setComment("");
+      setRating(5);
+      
+      toast({
+        title: "شكراً لك!",
+        description: "تم إرسال تقييمك بنجاح",
+      });
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({
+        title: "خطأ",
+        description: "فشل إرسال التقييم، يرجى المحاولة مرة أخرى",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -39,16 +64,28 @@ const FeedbackForm = () => {
         <h2 className="text-3xl font-bold text-center mb-12 text-primary">أضف تقييمك</h2>
         
         <motion.form
+          name="reviews"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="max-w-md mx-auto space-y-6 bg-[#1A0B26]/80 backdrop-blur-sm p-8 rounded-xl border border-[#4A0C6B]/20"
           onSubmit={handleSubmit}
         >
+          <input type="hidden" name="form-name" value="reviews" />
+          <p className="hidden">
+            <label>
+              Don't fill this out if you're human: <input name="bot-field" />
+            </label>
+          </p>
+          
           <div>
             <label className="block text-lg mb-2">الاسم</label>
             <input
               type="text"
+              name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
@@ -59,6 +96,7 @@ const FeedbackForm = () => {
           <div>
             <label className="block text-lg mb-2">التطبيق</label>
             <select
+              name="app"
               className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
               required
             >
@@ -87,11 +125,13 @@ const FeedbackForm = () => {
                 </button>
               ))}
             </div>
+            <input type="hidden" name="rating" value={rating} />
           </div>
           
           <div>
             <label className="block text-lg mb-2">التعليق</label>
             <textarea
+              name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary h-32"
