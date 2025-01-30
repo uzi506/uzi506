@@ -15,56 +15,55 @@ interface ReviewStore {
   addReview: (review: Omit<Review, "id">) => void;
 }
 
-// Create store with localStorage persistence
 export const useReviewStore = create<ReviewStore>()(
   persist(
     (set) => ({
-      reviews: [],
-      addReview: (review) => set((state) => ({
-        reviews: [
-          ...state.reviews,
-          {
-            ...review,
-            id: Date.now().toString()
-          }
-        ]
-      }))
+      reviews: [
+        {
+          id: "1",
+          name: "أحمد",
+          rating: 5,
+          comment: "تطبيق رائع وسهل الاستخدام",
+          app: "يقين"
+        }
+      ],
+      addReview: (review) => 
+        set((state) => ({
+          reviews: [
+            ...state.reviews,
+            {
+              ...review,
+              id: Date.now().toString()
+            }
+          ]
+        }))
     }),
     {
-      name: "reviews-storage", // LocalStorage key
+      name: "reviews-storage",
+      getStorage: () => localStorage,
     }
   )
 );
 
-// Reviews component
 const Reviews = () => {
   const { reviews } = useReviewStore();
   
   return (
-    <div className="space-y-6 p-4">
+    <div className="reviews-container">
       {reviews.map((review) => (
-        <div 
-          key={review.id}
-          className="p-6 bg-white/10 rounded-lg backdrop-blur-sm border border-purple-500/20"
-        >
-          <div className="flex items-center gap-4 mb-3">
-            <h3 className="text-xl font-semibold text-purple-200">{review.name}</h3>
-            <div className="flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={20}
-                  className={
-                    i < review.rating 
-                      ? "fill-yellow-400 text-yellow-400" 
-                      : "text-yellow-400/30"
-                  }
-                />
-              ))}
-            </div>
+        <div key={review.id} className="review-item">
+          <h3>{review.name}</h3>
+          <div className="rating">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={i < review.rating ? "filled-star" : "empty-star"}
+                size={20}
+              />
+            ))}
           </div>
-          <p className="text-gray-200">{review.comment}</p>
-          <div className="mt-3 text-sm text-purple-300">{review.app}</div>
+          <p>{review.comment}</p>
+          <span className="app-name">{review.app}</span>
         </div>
       ))}
     </div>
