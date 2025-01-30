@@ -1,4 +1,3 @@
-// FeedbackForm.tsx
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
@@ -10,41 +9,29 @@ const FeedbackForm = () => {
   const [hoveredStar, setHoveredStar] = useState(0);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const addReview = useReviewStore((state) => state.addReview);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name.trim() || !comment.trim()) {
-      toast({
-        title: "خطأ",
-        description: "الرجاء تعبئة جميع الحقول المطلوبة",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
     try {
-      // Add to local state
-      addReview({
+      // Add review to local state
+      await addReview({
         name,
         rating,
         comment,
         app: "يقين"
       });
 
-      // Submit to Netlify
-      const formData = new URLSearchParams();
-      formData.append("form-name", "reviews");
-      formData.append("name", name);
-      formData.append("rating", rating.toString());
-      formData.append("comment", comment);
-      formData.append("app", "يقين");
-      formData.append("bot-field", "");
+      // Send data to Netlify Forms
+      const formData = new URLSearchParams({
+        "form-name": "reviews",
+        name,
+        rating: rating.toString(),
+        comment,
+        app: "يقين"
+      });
 
       await fetch("/", {
         method: "POST",
@@ -68,8 +55,6 @@ const FeedbackForm = () => {
         description: "فشل إرسال التقييم، يرجى المحاولة مرة أخرى",
         variant: "destructive"
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -86,7 +71,7 @@ const FeedbackForm = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-md mx-auto space-y-6 bg-[#1A0B26] p-8 rounded-xl border border-[#4A0C6B]"
+          className="max-w-md mx-auto space-y-6 bg-[#1A0B26]/80 backdrop-blur-sm p-8 rounded-xl border border-[#4A0C6B]/20"
           onSubmit={handleSubmit}
         >
           <input type="hidden" name="form-name" value="reviews" />
@@ -103,7 +88,7 @@ const FeedbackForm = () => {
               name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#2D0845] border border-[#4A0C6B] rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
+              className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
               required
             />
           </div>
@@ -112,7 +97,7 @@ const FeedbackForm = () => {
             <label className="block text-lg mb-2">التطبيق</label>
             <select
               name="app"
-              className="w-full bg-[#2D0845] border border-[#4A0C6B] rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
+              className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary"
               required
             >
               <option value="يقين">يقين</option>
@@ -121,7 +106,7 @@ const FeedbackForm = () => {
           
           <div>
             <label className="block text-lg mb-2">التقييم</label>
-            <div className="flex gap-2 justify-end">
+            <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
@@ -129,10 +114,9 @@ const FeedbackForm = () => {
                   onMouseEnter={() => setHoveredStar(star)}
                   onMouseLeave={() => setHoveredStar(0)}
                   onClick={() => setRating(star)}
-                  aria-label={`تقييم ${star} نجوم`}
                 >
                   <Star
-                    className={`w-8 h-8 transition-colors ${
+                    className={`w-8 h-8 ${
                       star <= (hoveredStar || rating)
                         ? "fill-yellow-400 text-yellow-400"
                         : "text-yellow-400/30"
@@ -150,21 +134,16 @@ const FeedbackForm = () => {
               name="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full bg-[#2D0845] border border-[#4A0C6B] rounded-lg px-4 py-2 focus:outline-none focus:border-primary h-32 resize-none"
+              className="w-full bg-[#2D0845]/50 border border-[#4A0C6B]/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary h-32"
               required
-              minLength={10}
-              maxLength={500}
             />
           </div>
           
           <button
             type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-yellow-400 hover:bg-yellow-500 text-[#2D0845] font-bold py-3 rounded-lg transition-colors ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg transition-colors"
           >
-            {isSubmitting ? "جاري الإرسال..." : "إرسال التقييم"}
+            إرسال التقييم
           </button>
         </motion.form>
       </div>
