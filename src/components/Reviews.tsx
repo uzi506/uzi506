@@ -41,17 +41,30 @@ const Reviews = () => {
   const { reviews } = useReviewStore();
   
   return (
-    <div className="reviews-container">
+    <div className="space-y-6 p-4">
       {reviews.map((review) => (
-        <div key={review.id} className="review-item">
-          <h3 className="review-name">{review.name}</h3>
-          <div className="rating-stars">
-            {[...Array(review.rating)].map((_, i) => (
-              <Star key={i} className="filled-star" />
-            ))}
+        <div 
+          key={review.id}
+          className="p-6 bg-white/10 rounded-lg backdrop-blur-sm border border-purple-500/20"
+        >
+          <div className="flex items-center gap-4 mb-3">
+            <h3 className="text-xl font-semibold text-purple-200">{review.name}</h3>
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  size={20}
+                  className={
+                    i < review.rating 
+                      ? "fill-yellow-400 text-yellow-400" 
+                      : "text-yellow-400/30"
+                  }
+                />
+              ))}
+            </div>
           </div>
-          <p className="review-comment">{review.comment}</p>
-          <span className="app-name">{review.app}</span>
+          <p className="text-gray-200">{review.comment}</p>
+          <div className="mt-3 text-sm text-purple-300">{review.app}</div>
         </div>
       ))}
     </div>
