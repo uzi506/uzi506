@@ -1,3 +1,4 @@
+// Reviews.tsx
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Star } from "lucide-react";
@@ -52,8 +53,8 @@ const Reviews = () => {
     <div className="reviews-container">
       {reviews.map((review) => (
         <div key={review.id} className="review-item">
-          <h3>{review.name}</h3>
-          <div className="rating">
+          <h3 className="review-name">{review.name}</h3>
+          <div className="rating-stars">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
@@ -62,7 +63,7 @@ const Reviews = () => {
               />
             ))}
           </div>
-          <p>{review.comment}</p>
+          <p className="review-comment">{review.comment}</p>
           <span className="app-name">{review.app}</span>
         </div>
       ))}
