@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useReviewStore } from "./Reviews";
+import { useReviewStore } from "../Reviews";
 
 const FeedbackForm = () => {
   const [rating, setRating] = useState(5);
